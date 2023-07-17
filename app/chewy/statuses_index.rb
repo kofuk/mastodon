@@ -4,30 +4,17 @@ class StatusesIndex < Chewy::Index
   include FormattingHelper
 
   settings index: { refresh_interval: '30s' }, analysis: {
-    filter: {
-      english_stop: {
-        type: 'stop',
-        stopwords: '_english_',
-      },
-      english_stemmer: {
-        type: 'stemmer',
-        language: 'english',
-      },
-      english_possessive_stemmer: {
-        type: 'stemmer',
-        language: 'possessive_english',
-      },
-    },
     analyzer: {
       content: {
-        tokenizer: 'uax_url_email',
+        char_filter: %w(icu_normalizer),
+        tokenizer: 'kuromoji_tokenizer',
         filter: %w(
-          english_possessive_stemmer
-          lowercase
-          asciifolding
+          kuromoji_baseform
+          kuromoji_part_of_speech
           cjk_width
-          english_stop
-          english_stemmer
+          ja_stop
+          kuromoji_stemmer
+          lowercase
         ),
       },
     },

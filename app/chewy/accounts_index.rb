@@ -4,8 +4,15 @@ class AccountsIndex < Chewy::Index
   settings index: { refresh_interval: '30s' }, analysis: {
     analyzer: {
       content: {
-        tokenizer: 'whitespace',
-        filter: %w(lowercase asciifolding cjk_width),
+        tokenizer: 'kuromoji_tokenizer',
+        filter: %w(
+          kuromoji_baseform
+          kuromoji_part_of_speech
+          cjk_width
+          ja_stop
+          kuromoji_stemmer
+          lowercase
+        ),
       },
 
       edge_ngram: {
