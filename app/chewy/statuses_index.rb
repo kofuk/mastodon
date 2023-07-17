@@ -2,7 +2,7 @@
 
 class StatusesIndex < Chewy::Index
   settings index: index_preset(refresh_interval: '30s', number_of_shards: 5), analysis: {
-    filter: {
+   filter: {
       english_stop: {
         type: 'stop',
         stopwords: '_english_',
@@ -21,19 +21,29 @@ class StatusesIndex < Chewy::Index
 
     analyzer: {
       verbatim: {
-        tokenizer: 'uax_url_email',
-        filter: %w(lowercase),
+        char_filter: %w(icu_normalizer),
+        tokenizer: 'kuromoji_tokenizer',
+        filter: %w(
+          lowercase
+          kuromoji_baseform
+          kuromoji_part_of_speech
+          cjk_width
+          ja_stop
+          kuromoji_stemmer
+          english_stemmer
+        ),
       },
 
       content: {
-        tokenizer: 'standard',
+        char_filter: %w(icu_normalizer),
+        tokenizer: 'kuromoji_tokenizer',
         filter: %w(
           lowercase
-          asciifolding
+          kuromoji_baseform
+          kuromoji_part_of_speech
           cjk_width
-          elision
-          english_possessive_stemmer
-          english_stop
+          ja_stop
+          kuromoji_stemmer
           english_stemmer
         ),
       },
