@@ -30,14 +30,16 @@ class AccountsIndex < Chewy::Index
     analyzer: {
       # "The FOOING's bar" becomes "foo bar"
       natural: {
-        tokenizer: 'standard',
+        char_filter: %w(icu_normalizer),
+        tokenizer: 'kuromoji_tokenizer',
         filter: %w(
           lowercase
-          asciifolding
+          kuromoji_baseform
+          kuromoji_part_of_speech
           cjk_width
+          ja_stop
+          kuromoji_stemmer
           elision
-          english_possessive_stemmer
-          english_stop
           english_stemmer
         ),
       },
