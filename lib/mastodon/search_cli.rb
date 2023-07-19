@@ -64,7 +64,7 @@ module Mastodon
       end
 
       progress.title = 'Estimating workload '
-      progress.total = indices.sum { |index| importers[index].estimate! }
+      progress.total = [0, indices.sum { |index| importers[index].estimate! }].max
 
       reset_connection_pools!
 
