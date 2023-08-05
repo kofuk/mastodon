@@ -8,8 +8,6 @@ import { Helmet } from '@unhead/react/helmet';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import { domain } from 'mastodon/initial_state';
-
 import { injectIntl } from '@/mastodon/components/intl';
 import { fetchServer, fetchExtendedDescription, fetchDomainBlocks  } from 'mastodon/actions/server';
 import { Account } from 'mastodon/components/account';
@@ -95,7 +93,7 @@ class About extends PureComponent {
               className='about__header__hero'
             />
             <NavigationFocusTarget as='h1'>
-              {isLoading ? <Skeleton width='10ch' /> : domain}
+              {isLoading ? <Skeleton width='10ch' /> : server.item?.title}
             </NavigationFocusTarget>
             <p><FormattedMessage id='about.powered_by' defaultMessage='Decentralized social media powered by {mastodon}' values={{ mastodon: <a href='https://joinmastodon.org' className='about__mail' target='_blank' rel='noopener'>Mastodon</a> }} /></p>
           </div>
