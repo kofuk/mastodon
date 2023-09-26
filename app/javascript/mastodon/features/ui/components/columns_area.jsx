@@ -4,6 +4,7 @@ import { Children, cloneElement, useCallback } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
+import { isSmallScreen } from 'mastodon/is_mobile';
 import { scrollRight } from '../../../scroll';
 import BundleContainer from '../containers/bundle_container';
 import {
@@ -118,6 +119,22 @@ export default class ColumnsArea extends ImmutablePureComponent {
     const { columns, children, singleColumn, isModalOpen } = this.props;
     const { renderComposePanel } = this.state;
 
+    const isMobile = isSmallScreen(window.innerWidth);
+
+    const mainPanel = (
+      <div className='columns-area__panels__main'>
+        <div className='tabs-bar__wrapper'><TabsBarPortal /></div>
+        <div className='columns-area columns-area--mobile'>{children}</div>
+      </div>
+    );
+    const navigationPanel = (
+      <div className='columns-area__panels__pane columns-area__panels__pane--start columns-area__panels__pane--navigational'>
+        <div className='columns-area__panels__pane__inner'>
+          <NavigationPanel position={isMobile ? 'left' : 'right'} />
+        </div>
+      </div>
+    );
+
     if (singleColumn) {
       return (
         <div className='columns-area__panels'>
@@ -127,16 +144,8 @@ export default class ColumnsArea extends ImmutablePureComponent {
             </div>
           </div>
 
-          <div className='columns-area__panels__main'>
-            <div className='tabs-bar__wrapper'><TabsBarPortal /></div>
-            <div className='columns-area columns-area--mobile'>{children}</div>
-          </div>
-
-          <div className='columns-area__panels__pane columns-area__panels__pane--start columns-area__panels__pane--navigational'>
-            <div className='columns-area__panels__pane__inner'>
-              <NavigationPanel />
-            </div>
-          </div>
+          {isMobile ? navigationPanel : mainPanel}
+          {isMobile ? mainPanel : navigationPanel}
         </div>
       );
     }
