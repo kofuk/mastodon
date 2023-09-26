@@ -43,6 +43,7 @@ class NavigationPanel extends Component {
 
   static propTypes = {
     intl: PropTypes.object.isRequired,
+    position: PropTypes.string.isRequired,
   };
 
   isFirehoseActive = (match, location) => {
@@ -50,7 +51,7 @@ class NavigationPanel extends Component {
   };
 
   render () {
-    const { intl } = this.props;
+    const { intl, position } = this.props;
     const { signedIn, disabledAccountId } = this.context.identity;
 
     let banner = undefined;
@@ -65,7 +66,7 @@ class NavigationPanel extends Component {
       </div>);
 
     return (
-      <div className='navigation-panel'>
+      <div className={`navigation-panel ${position}`}>
         <div className='navigation-panel__logo'>
           <Link to='/' className='column-link column-link--logo'><WordmarkLogo /></Link>
           {!banner && <hr />}
