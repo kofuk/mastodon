@@ -6,6 +6,11 @@ const LAYOUT_BREAKPOINT = 630;
 
 export const isMobile = (width: number) => width <= LAYOUT_BREAKPOINT;
 
+// If the screen smaller than this, label of side panel is hidden.
+// Taken from app/javascript/styles/mastodon/components.scss
+const SMALL_SCREEN_THRESHOLD = 1175 - 285 - 1;
+export const isSmallScreen = (width: number) => width <= SMALL_SCREEN_THRESHOLD;
+
 export const transientSingleColumn = !forceSingleColumn && !hasMultiColumnPath;
 
 export type LayoutType = 'mobile' | 'single-column' | 'multi-column';
