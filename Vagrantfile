@@ -10,7 +10,14 @@ curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 sudo apt-add-repository 'deb https://dl.yarnpkg.com/debian/ stable main'
 
 # Add repo for NodeJS
-curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+NODE_MAJOR=16
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+sudo apt-get update
+sudo apt-get install nodejs -y
 
 # Add firewall rule to redirect 80 to PORT and save
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port #{ENV["PORT"]}
@@ -62,11 +69,11 @@ SCRIPT
 
 $provisionElasticsearch = <<SCRIPT
 # Install Elastic Search
-sudo apt install openjdk-17-jre-headless -y
+sudo apt-get install openjdk-17-jre-headless -y
 sudo wget -O /usr/share/keyrings/elasticsearch.asc https://artifacts.elastic.co/GPG-KEY-elasticsearch
 sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/elasticsearch.asc] https://artifacts.elastic.co/packages/7.x/apt stable main" > /etc/apt/sources.list.d/elastic-7.x.list'
-sudo apt update
-sudo apt install elasticsearch -y
+sudo apt-get update
+sudo apt-get install elasticsearch -y
 
 sudo systemctl daemon-reload
 sudo systemctl enable --now elasticsearch
@@ -82,7 +89,7 @@ xpack.security.enabled: false' > /etc/elasticsearch/elasticsearch.yml
 sudo systemctl restart elasticsearch
 
 # Install Kibana
-sudo apt install kibana -y
+sudo apt-get install kibana -y
 sudo systemctl enable --now kibana
 
 echo 'server.host: "0.0.0.0"
@@ -116,7 +123,7 @@ yarn set version classic
 yarn install
 
 # Build Mastodon
-export RAILS_ENV=development 
+export RAILS_ENV=development
 export $(cat ".env.vagrant" | xargs)
 bundle exec rails db:setup
 
@@ -157,12 +164,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = "mastodon.local"
 
   if defined?(VagrantPlugins::HostsUpdater)
-    config.vm.network :private_network, ip: "192.168.42.42", nictype: "virtio"
+    config.vm.network :private_network, ip: "192.168.56.42", nictype: "virtio"
     config.hostsupdater.remove_on_suspend = false
   end
 
   if config.vm.networks.any? { |type, options| type == :private_network }
-    config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ['rw', 'actimeo=1']
+    config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ['rw', 'actimeo=1', 'vers=4', 'tcp']
   else
     config.vm.synced_folder ".", "/vagrant"
   end
