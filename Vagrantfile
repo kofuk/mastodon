@@ -66,11 +66,11 @@ SCRIPT
 
 $provisionElasticsearch = <<SCRIPT
 # Install Elastic Search
-sudo apt install openjdk-17-jre-headless -y
+sudo apt-get install openjdk-17-jre-headless -y
 sudo wget -O /usr/share/keyrings/elasticsearch.asc https://artifacts.elastic.co/GPG-KEY-elasticsearch
 sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/elasticsearch.asc] https://artifacts.elastic.co/packages/7.x/apt stable main" > /etc/apt/sources.list.d/elastic-7.x.list'
-sudo apt update
-sudo apt install elasticsearch -y
+sudo apt-get update
+sudo apt-get install elasticsearch -y
 
 sudo systemctl daemon-reload
 sudo systemctl enable --now elasticsearch
@@ -86,7 +86,7 @@ xpack.security.enabled: false' > /etc/elasticsearch/elasticsearch.yml
 sudo systemctl restart elasticsearch
 
 # Install Kibana
-sudo apt install kibana -y
+sudo apt-get install kibana -y
 sudo systemctl enable --now kibana
 
 echo 'server.host: "0.0.0.0"
@@ -167,12 +167,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = "mastodon.local"
 
   if defined?(VagrantPlugins::HostsUpdater)
-    config.vm.network :private_network, ip: "192.168.42.42", nictype: "virtio"
+    config.vm.network :private_network, ip: "192.168.56.42", nictype: "virtio"
     config.hostsupdater.remove_on_suspend = false
   end
 
   if config.vm.networks.any? { |type, options| type == :private_network }
-    config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ['rw', 'actimeo=1']
+    config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ['rw', 'actimeo=1', 'vers=4', 'tcp']
   else
     config.vm.synced_folder ".", "/vagrant"
   end
