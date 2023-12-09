@@ -3044,6 +3044,7 @@ $ui-header-logo-wordmark-width: 99px;
       &.left {
         border-inline-end: 1px solid lighten($ui-base-color, 8%);
       }
+
       &.right {
         border-inline-start: 1px solid lighten($ui-base-color, 8%);
       }
@@ -10155,6 +10156,7 @@ noscript {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  margin-bottom: 63px;
 }
 
 .notification-bar {
@@ -11157,5 +11159,26 @@ noscript {
       font-weight: 500;
       color: $secondary-text-color;
     }
+  }
+}
+
+.ui__composebutton {
+  display: block;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 60px;
+  margin: 20px;
+  border-radius: 999px !important;
+  font-size: 25px;
+  line-height: 60px;
+  text-align: center;
+  background-color: $ui-button-background-color;
+  color: #ffffff;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 30%);
+
+  svg {
+    padding-top: 17px;
   }
 }
