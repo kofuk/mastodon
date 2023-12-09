@@ -4,7 +4,7 @@ import { PureComponent } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 
 import classNames from 'classnames';
-import { Redirect, Route, withRouter } from 'react-router-dom';
+import { Link, Redirect, Route, withRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
@@ -14,6 +14,7 @@ import { HotKeys } from 'react-hotkeys';
 import { focusApp, unfocusApp, changeLayout } from 'mastodon/actions/app';
 import { synchronouslySubmitMarkers, submitMarkers, fetchMarkers } from 'mastodon/actions/markers';
 import { INTRODUCTION_VERSION } from 'mastodon/actions/onboarding';
+import { Icon } from 'mastodon/components/icon';
 import PictureInPicture from 'mastodon/features/picture_in_picture';
 import { layoutFromWindow } from 'mastodon/is_mobile';
 
@@ -552,6 +553,7 @@ class UI extends PureComponent {
   render () {
     const { draggingOver } = this.state;
     const { children, isComposing, location, dropdownMenuIsOpen, layout } = this.props;
+    const { signedIn } = this.context.identity;
 
     const handlers = {
       help: this.handleHotkeyToggleHelp,
@@ -575,6 +577,12 @@ class UI extends PureComponent {
       goToRequests: this.handleHotkeyGoToRequests,
     };
 
+    const composeButton = (
+      <Link to='/publish' className="ui__composebutton">
+        <Icon id='pencil' fixedWidth />
+      </Link>
+    );
+
     return (
       <HotKeys keyMap={keyMap} handlers={handlers} ref={this.setHotkeysRef} attach={window} focused>
         <div className={classNames('ui', { 'is-composing': isComposing })} ref={this.setRef} style={{ pointerEvents: dropdownMenuIsOpen ? 'none' : null }}>
@@ -589,6 +597,8 @@ class UI extends PureComponent {
           <LoadingBarContainer className='loading-bar' />
           <ModalContainer />
           <UploadArea active={draggingOver} onClose={this.closeUploadModal} />
+
+          {(signedIn && location.pathname !== '/publish') && composeButton}
         </div>
       </HotKeys>
     );

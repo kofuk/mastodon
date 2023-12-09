@@ -9274,6 +9274,7 @@ noscript {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  margin-bottom: 63px;
 }
 
 .notification-bar {
@@ -9384,4 +9385,21 @@ noscript {
     line-height: inherit;
     padding: 0;
   }
+}
+
+.ui__composebutton {
+  display: block;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 60px;
+  margin: 20px;
+  border-radius: 999px !important;
+  font-size: 25px;
+  line-height: 60px;
+  text-align: center;
+  background-color: $blurple-600;
+  color: $primary-text-color;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
 }
