@@ -4,7 +4,7 @@ import { PureComponent } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 
 import classNames from 'classnames';
-import { Redirect, Route, withRouter } from 'react-router-dom';
+import { Link, Redirect, Route, withRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
@@ -15,6 +15,8 @@ import { focusApp, unfocusApp, changeLayout } from 'mastodon/actions/app';
 import { synchronouslySubmitMarkers, submitMarkers, fetchMarkers } from 'mastodon/actions/markers';
 import { initializeNotifications } from 'mastodon/actions/notifications_migration';
 import { INTRODUCTION_VERSION } from 'mastodon/actions/onboarding';
+import EditIcon from '@/material-icons/400-24px/edit.svg?react';
+import { Icon } from 'mastodon/components/icon';
 import { HoverCardController } from 'mastodon/components/hover_card_controller';
 import { PictureInPicture } from 'mastodon/features/picture_in_picture';
 import { identityContextPropShape, withIdentity } from 'mastodon/identity_context';
@@ -555,6 +557,7 @@ class UI extends PureComponent {
   render () {
     const { draggingOver } = this.state;
     const { children, isComposing, location, layout } = this.props;
+    const { signedIn } = this.props.identity;
 
     const handlers = {
       help: this.handleHotkeyToggleHelp,
@@ -578,6 +581,12 @@ class UI extends PureComponent {
       goToRequests: this.handleHotkeyGoToRequests,
     };
 
+    const composeButton = (
+      <Link to='/publish' className="ui__composebutton">
+        <Icon icon={EditIcon} fixedWidth />
+      </Link>
+    );
+
     return (
       <HotKeys keyMap={keyMap} handlers={handlers} ref={this.setHotkeysRef} attach={window} focused>
         <div className={classNames('ui', { 'is-composing': isComposing })} ref={this.setRef}>
@@ -593,6 +602,8 @@ class UI extends PureComponent {
           <LoadingBarContainer className='loading-bar' />
           <ModalContainer />
           <UploadArea active={draggingOver} onClose={this.closeUploadModal} />
+
+          {(signedIn && location.pathname !== '/publish') && composeButton}
         </div>
       </HotKeys>
     );
