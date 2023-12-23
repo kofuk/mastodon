@@ -11643,3 +11643,12 @@ noscript {
     }
   }
 }
+
+.reply-indicator__content .emojione,
+.status__content .emojione {
+  width: auto;
+}
+
+.detailed-status .status__content .emojione {
+  width: auto;
+}
