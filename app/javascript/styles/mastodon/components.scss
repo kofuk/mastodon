@@ -9403,3 +9403,12 @@ noscript {
   color: $primary-text-color;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
 }
+
+.reply-indicator__content .emojione,
+.status__content .emojione {
+  width: auto;
+}
+
+.detailed-status .status__content .emojione {
+  width: auto;
+}
