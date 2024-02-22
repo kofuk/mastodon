@@ -123,8 +123,15 @@ class NotifyService < BaseService
 
     private
 
+    def following_sender?
+      return @following_sender if defined?(@following_sender)
+
+      @following_sender = @recipient.following?(@notification.from_account) || @recipient.requested?(@notification.from_account)
+    end
+
     def blocked_mention?
-      FeedManager.instance.filter?(:mentions, @notification.target_status, @recipient)
+      (@notification.from_account.followers_count <= 5 && !following_sender?) ||
+        FeedManager.instance.filter?(:mentions, @notification.mention.status, @recipient)
     end
 
     def message?
