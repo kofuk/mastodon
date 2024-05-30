@@ -34,8 +34,7 @@ class NotifyService < BaseService
   private
 
   def blocked_mention?
-    (@notification.from_account.followers_count <= 1 && !following_sender?) ||
-      FeedManager.instance.filter?(:mentions, @notification.mention.status, @recipient)
+    FeedManager.instance.filter?(:mentions, @notification.mention.status, @recipient)
   end
 
   def following_sender?
