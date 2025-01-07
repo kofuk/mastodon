@@ -2,3 +2,4 @@ web: env PORT=3000 RAILS_ENV=development bundle exec puma -C config/puma.rb
 sidekiq: env PORT=3000 RAILS_ENV=development bundle exec sidekiq
 stream: env PORT=4000 yarn workspace @mastodon/streaming start
 webpack: bin/webpack-dev-server
+jaeger: docker container run --rm -p 4317:4317 -p 4318:4318 -p 16686:16686 -e COLLECTOR_OTLP_ENABLED=true jaegertracing/all-in-one:latest
